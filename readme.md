@@ -4,4 +4,8 @@
 
 ---
 
-todo..
+## Tokenlizer
+
+Transfer a string into a series of tokens.
+
+[Test Cases](./test/tokenlizer.spec.ts)
