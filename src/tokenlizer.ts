@@ -1,5 +1,11 @@
+export enum TokenType {
+  Paren = 'paren',
+  Number = 'number',
+  Name = 'name',
+}
+
 interface Token {
-  type: string
+  type: TokenType
   value: string
 }
 
@@ -19,7 +25,7 @@ export function tokenlizer(code: string): Token[] {
 
     if (char === '(') {
       tokens.push({
-        type: 'paren',
+        type: TokenType.Paren,
         value: char,
       })
       p++
@@ -28,7 +34,7 @@ export function tokenlizer(code: string): Token[] {
 
     if (char === ')') {
       tokens.push({
-        type: 'paren',
+        type: TokenType.Paren,
         value: ')',
       })
       p++
@@ -42,7 +48,7 @@ export function tokenlizer(code: string): Token[] {
         char = code[++p]
       }
       tokens.push({
-        type: 'name',
+        type: TokenType.Name,
         value,
       })
       continue
@@ -55,7 +61,7 @@ export function tokenlizer(code: string): Token[] {
         char = code[++p]
       }
       tokens.push({
-        type: 'number',
+        type: TokenType.Number,
         value,
       })
       continue
