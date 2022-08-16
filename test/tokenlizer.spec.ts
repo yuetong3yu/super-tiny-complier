@@ -27,7 +27,7 @@ it('Left Parenthesis', () => {
   ])
 })
 
-it('Operater Name', () => {
+it('Operator Name', () => {
   expect(tokenlizer('add')).toEqual([
     {
       type: 'name',
