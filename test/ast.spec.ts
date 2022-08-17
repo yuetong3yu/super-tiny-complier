@@ -85,6 +85,10 @@ it('Call Expression', () => {
       type: TokenType.Number,
       value: '4',
     },
+    {
+      type: TokenType.Paren,
+      value: ')',
+    },
   ]
   const ast_result = {
     type: NodeType.Program,
@@ -99,7 +103,7 @@ it('Call Expression', () => {
           },
           {
             type: NodeType.NumberLiteral,
-            value: '2',
+            value: '4',
           },
         ],
       },

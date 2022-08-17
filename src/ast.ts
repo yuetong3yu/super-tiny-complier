@@ -10,13 +10,21 @@ export interface BaseNode {
   type: NodeType
 }
 
+export type ChildNode = NumberNode | CallExpressionNode
+
 export interface RootNode extends BaseNode {
   type: NodeType.Program
-  body: BaseNode[]
+  body: ChildNode[]
 }
 
 export interface NumberNode extends BaseNode {
   value: string
+}
+
+export interface CallExpressionNode extends BaseNode {
+  type: NodeType.CallExpression
+  name: string
+  params: ChildNode[]
 }
 
 function createRootNode(): RootNode {
@@ -33,18 +41,40 @@ function createNumberNode(value: string): NumberNode {
   }
 }
 
+function createExpressionNode(name: string): CallExpressionNode {
+  return {
+    type: NodeType.CallExpression,
+    name,
+    params: [],
+  }
+}
+
 export function ast(tokens: Token[]): any {
   let p = 0
   let token = tokens[p]
 
   const rootNode: RootNode = createRootNode()
 
-  while (p < tokens.length) {
-    if (token.type === TokenType.Number) {
-      rootNode.body.push(createNumberNode(token.value))
+  if (token.type === TokenType.Number) {
+    rootNode.body.push(createNumberNode(token.value))
+  }
+
+  if (token.type === TokenType.Paren && token.value === '(') {
+    token = tokens[++p]
+    const callExpressionNode = createExpressionNode(token.value)
+
+    token = tokens[++p]
+    while (token.type !== TokenType.Paren || token.value !== ')') {
+      if (token.type === TokenType.Number) {
+        const numberNode = createNumberNode(token.value)
+        callExpressionNode.params.push(numberNode)
+      }
+
+      token = tokens[++p]
     }
+
     p++
-    continue
+    rootNode.body.push(callExpressionNode)
   }
 
   return rootNode
