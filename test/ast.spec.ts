@@ -111,3 +111,83 @@ it('Call Expression', () => {
   }
   expect(ast(tokens)).toEqual(ast_result)
 })
+
+it('Two Call Expressions', () => {
+  const tokens: Token[] = [
+    {
+      type: TokenType.Paren,
+      value: '(',
+    },
+    {
+      type: TokenType.Name,
+      value: 'add',
+    },
+    {
+      type: TokenType.Number,
+      value: '2',
+    },
+    {
+      type: TokenType.Number,
+      value: '4',
+    },
+    {
+      type: TokenType.Paren,
+      value: ')',
+    },
+    {
+      type: TokenType.Paren,
+      value: '(',
+    },
+    {
+      type: TokenType.Name,
+      value: 'add',
+    },
+    {
+      type: TokenType.Number,
+      value: '5',
+    },
+    {
+      type: TokenType.Number,
+      value: '4',
+    },
+    {
+      type: TokenType.Paren,
+      value: ')',
+    },
+  ]
+  const ast_result = {
+    type: NodeType.Program,
+    body: [
+      {
+        type: NodeType.CallExpression,
+        name: 'add',
+        params: [
+          {
+            type: NodeType.NumberLiteral,
+            value: '2',
+          },
+          {
+            type: NodeType.NumberLiteral,
+            value: '4',
+          },
+        ],
+      },
+      {
+        type: NodeType.CallExpression,
+        name: 'add',
+        params: [
+          {
+            type: NodeType.NumberLiteral,
+            value: '5',
+          },
+          {
+            type: NodeType.NumberLiteral,
+            value: '4',
+          },
+        ],
+      },
+    ],
+  }
+
+  expect(ast(tokens)).toEqual(ast_result)
+})
