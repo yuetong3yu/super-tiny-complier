@@ -3,7 +3,7 @@ import { ast, NodeType, TokenType } from '../src'
 
 import type { Token } from '../src'
 
-it.skip('AST', () => {
+it('AST', () => {
   const tokens: Token[] = [
     { type: TokenType.Paren, value: '(' },
     { type: TokenType.Name, value: 'add' },

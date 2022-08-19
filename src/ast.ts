@@ -51,30 +51,33 @@ function createExpressionNode(name: string): CallExpressionNode {
 
 export function ast(tokens: Token[]): any {
   let p = 0
-  let token = tokens[p]
-
   const rootNode: RootNode = createRootNode()
 
-  if (token.type === TokenType.Number) {
-    rootNode.body.push(createNumberNode(token.value))
-  }
-
-  if (token.type === TokenType.Paren && token.value === '(') {
-    token = tokens[++p]
-    const callExpressionNode = createExpressionNode(token.value)
-
-    token = tokens[++p]
-    while (token.type !== TokenType.Paren || token.value !== ')') {
-      if (token.type === TokenType.Number) {
-        const numberNode = createNumberNode(token.value)
-        callExpressionNode.params.push(numberNode)
-      }
-
-      token = tokens[++p]
+  function traverse(): ChildNode {
+    let token = tokens[p]
+    if (token.type === TokenType.Number) {
+      p++
+      return createNumberNode(token.value)
     }
 
-    p++
-    rootNode.body.push(callExpressionNode)
+    if (token.type === TokenType.Paren && token.value === '(') {
+      token = tokens[++p]
+      const callExpressionNode = createExpressionNode(token.value)
+      token = tokens[++p]
+      while (!(token.type === TokenType.Paren && token.value === ')')) {
+        callExpressionNode.params.push(traverse())
+        token = tokens[p]
+      }
+
+      p++
+      return callExpressionNode
+    }
+
+    throw new Error('Can not identify the token type!')
+  }
+
+  while (p < tokens.length) {
+    rootNode.body.push(traverse())
   }
 
   return rootNode
