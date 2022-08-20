@@ -1,2 +1,2 @@
 export * from './tokenlizer'
-export * from './ast'
+export * from './parser'

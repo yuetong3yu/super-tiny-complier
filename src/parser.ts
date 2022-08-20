@@ -49,7 +49,7 @@ function createExpressionNode(name: string): CallExpressionNode {
   }
 }
 
-export function ast(tokens: Token[]): any {
+export function parser(tokens: Token[]): any {
   let p = 0
   const rootNode: RootNode = createRootNode()
 

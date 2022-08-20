@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest'
-import { ast, NodeType, TokenType } from '../src'
+import { parser, NodeType, TokenType } from '../src'
 
 import type { Token } from '../src'
 
@@ -45,7 +45,7 @@ it('AST', () => {
     ],
   }
 
-  expect(ast(tokens)).toEqual(ast_result)
+  expect(parser(tokens)).toEqual(ast_result)
 })
 
 it('Number Literal', () => {
@@ -56,7 +56,7 @@ it('Number Literal', () => {
     },
   ]
 
-  expect(ast(token)).toEqual({
+  expect(parser(token)).toEqual({
     type: 'Program',
     body: [
       {
@@ -109,7 +109,7 @@ it('Call Expression', () => {
       },
     ],
   }
-  expect(ast(tokens)).toEqual(ast_result)
+  expect(parser(tokens)).toEqual(ast_result)
 })
 
 it('Two Call Expressions', () => {
@@ -189,5 +189,5 @@ it('Two Call Expressions', () => {
     ],
   }
 
-  expect(ast(tokens)).toEqual(ast_result)
+  expect(parser(tokens)).toEqual(ast_result)
 })
