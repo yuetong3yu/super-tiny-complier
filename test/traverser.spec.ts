@@ -1,28 +1,28 @@
 import { expect, it } from 'vitest'
-import { NodeType, traverser } from '../src'
+import { NodeType, traverser, Visitor, RootNode } from '../src'
 
 it('👍 Complete Traverse', () => {
-  const ast = {
-    type: 'Program',
+  const ast: RootNode = {
+    type: NodeType.Program,
     body: [
       {
-        type: 'CallExpression',
+        type: NodeType.CallExpression,
         name: 'add',
         params: [
           {
-            type: 'NumberLiteral',
+            type: NodeType.NumberLiteral,
             value: '2',
           },
           {
-            type: 'CallExpression',
+            type: NodeType.CallExpression,
             name: 'subtract',
             params: [
               {
-                type: 'NumberLiteral',
+                type: NodeType.NumberLiteral,
                 value: '4',
               },
               {
-                type: 'NumberLiteral',
+                type: NodeType.NumberLiteral,
                 value: '2',
               },
             ],
@@ -32,7 +32,7 @@ it('👍 Complete Traverse', () => {
     ],
   }
   const ops_arr: string[] = []
-  const operations = {
+  const visitor: Visitor = {
     [NodeType.Program]: {
       enter() {
         ops_arr.push('Program Enter')
@@ -59,7 +59,7 @@ it('👍 Complete Traverse', () => {
     },
   }
 
-  traverser()
+  traverser(ast, visitor)
 
   expect(ops_arr).toEqual([
     'Program Enter',
