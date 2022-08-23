@@ -31,30 +31,30 @@ it('👍 Complete Traverse', () => {
       },
     ],
   }
-  const ops_arr: string[] = []
+  const ops_arr: any[] = []
   const visitor: Visitor = {
     [NodeType.Program]: {
-      enter() {
-        ops_arr.push('Program Enter')
+      enter(node, parent) {
+        ops_arr.push(['Program Enter', node.type, ''])
       },
-      exit() {
-        ops_arr.push('Program Exit')
+      exit(node, parent) {
+        ops_arr.push(['Program Exit', node.type, ''])
       },
     },
     [NodeType.CallExpression]: {
-      enter() {
-        ops_arr.push('CallExpression Enter')
+      enter(node, parent) {
+        ops_arr.push(['CallExpression Enter', node.type, parent.type])
       },
-      exit() {
-        ops_arr.push('CallExpression Exit')
+      exit(node, parent) {
+        ops_arr.push(['CallExpression Exit', node.type, parent.type])
       },
     },
     [NodeType.NumberLiteral]: {
-      enter() {
-        ops_arr.push('Number Literal Enter')
+      enter(node, parent) {
+        ops_arr.push(['Number Literal Enter', node.type, parent.type])
       },
-      exit() {
-        ops_arr.push('Number Literal Exit')
+      exit(node, parent) {
+        ops_arr.push(['Number Literal Exit', node.type, parent.type])
       },
     },
   }
@@ -62,17 +62,17 @@ it('👍 Complete Traverse', () => {
   traverser(ast, visitor)
 
   expect(ops_arr).toEqual([
-    'Program Enter',
-    'CallExpression Enter',
-    'Number Literal Enter',
-    'Number Literal Exit',
-    'CallExpression Enter',
-    'Number Literal Enter',
-    'Number Literal Exit',
-    'Number Literal Enter',
-    'Number Literal Exit',
-    'CallExpression Exit',
-    'CallExpression Exit',
-    'Program Exit',
+    ['Program Enter', NodeType.Program, ''],
+    ['CallExpression Enter', NodeType.CallExpression, NodeType.Program],
+    ['Number Literal Enter', NodeType.NumberLiteral, NodeType.CallExpression],
+    ['Number Literal Exit', NodeType.NumberLiteral, NodeType.CallExpression],
+    ['CallExpression Enter', NodeType.CallExpression, NodeType.CallExpression],
+    ['Number Literal Enter', NodeType.NumberLiteral, NodeType.CallExpression],
+    ['Number Literal Exit', NodeType.NumberLiteral, NodeType.CallExpression],
+    ['Number Literal Enter', NodeType.NumberLiteral, NodeType.CallExpression],
+    ['Number Literal Exit', NodeType.NumberLiteral, NodeType.CallExpression],
+    ['CallExpression Exit', NodeType.CallExpression, NodeType.CallExpression],
+    ['CallExpression Exit', NodeType.CallExpression, NodeType.Program],
+    ['Program Exit', NodeType.Program, ''],
   ])
 })
