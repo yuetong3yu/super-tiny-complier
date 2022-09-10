@@ -7,8 +7,8 @@ export interface Visitor {
 }
 
 export type VisitorOption = {
-  enter(): void
-  exit(): void
+  enter(node: RootNode | ChildNode, parent: RootNode | ChildNode | '' | undefined): void
+  exit(node: RootNode | ChildNode, parent: RootNode | ChildNode | '' | undefined): void
 }
 
 export function traverser(ast: RootNode, visitor: Visitor) {
@@ -18,11 +18,11 @@ export function traverser(ast: RootNode, visitor: Visitor) {
     })
   }
 
-  function traverse(node: ChildNode | RootNode) {
+  function traverse(node: ChildNode | RootNode, parent?: RootNode | ChildNode) {
     // before
     const visitorObj = visitor[node.type]
     if (visitorObj) {
-      visitorObj.enter()
+      visitorObj.enter(node, parent)
     }
 
     switch (node.type) {
@@ -41,7 +41,7 @@ export function traverser(ast: RootNode, visitor: Visitor) {
     }
 
     if (visitorObj) {
-      visitorObj.exit()
+      visitorObj.exit(node, parent)
     }
   }
 
